@@ -104,8 +104,15 @@ class CustomBuildExt(build_ext):
         build_ext.finalize_options(self)
         # Prevent numpy from thinking it is still in its setup process:
         # https://docs.python.org/2/library/__builtin__.html#module-__builtin__
-        __builtins__.__NUMPY_SETUP__ = False
-
+        
+        try :
+            __builtins__.__NUMPY_SETUP__ = False
+        except:
+                try:
+                    import builtins
+                    builtins.__NUMPY_SETUP__ = False
+                except:
+                    print("Skipping numpy hack; if gensim installation fails, try installing numpy first")
         import numpy
         self.include_dirs.append(numpy.get_include())
 
